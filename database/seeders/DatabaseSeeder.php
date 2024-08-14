@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use App\Models\Unit;
 use App\Models\Ingredient;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Product;
+use App\Models\Unit;
+use App\Models\User;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-
 
         $units = [
             // Weight units
@@ -85,7 +84,6 @@ class DatabaseSeeder extends Seeder
         $kg = Unit::where('name', 'Kilogram')->first();
         $gm = Unit::where('name', 'Gram')->first();
 
-
         $ingredients = [
             [
                 'name' => 'Beef',
@@ -125,13 +123,10 @@ class DatabaseSeeder extends Seeder
             Product::create($product);
         }
 
-
         $beef = Ingredient::where('name', 'Beef')->first();
         $cheese = Ingredient::where('name', 'Cheese')->first();
         $onion = Ingredient::where('name', 'Onion')->first();
         $burger = Product::where('name', 'Cheese Burger')->first();
-
-
 
         // 150 gram of beef, 30 gram of cheese, 20 gram of onion
         $burger->ingredients()->attach($beef, ['quantity' => 150, 'unit_id' => $gm->id]);

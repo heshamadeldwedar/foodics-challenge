@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Ingredient;
+use Illuminate\Http\Request;
 
 class IngredientController extends Controller
 {
@@ -32,5 +32,4 @@ class IngredientController extends Controller
     {
         return Ingredient::with('stockUnit')->find($id);
     }
-
 }

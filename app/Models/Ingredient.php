@@ -14,13 +14,13 @@ class Ingredient extends Model
         'stock',
         'max_stock',
         'stock_unit_id',
-        'alert_sent'
+        'alert_sent',
     ];
 
     protected $casts = [
         'stock' => 'decimal:3',
         'max_stock' => 'decimal:3',
-        'alert_sent' => 'boolean'
+        'alert_sent' => 'boolean',
     ];
 
     public function stockUnit()
@@ -31,8 +31,8 @@ class Ingredient extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'product_ingredients')
-                    ->withPivot('amount', 'unit_id')
-                    ->withTimestamps();
+            ->withPivot('amount', 'unit_id')
+            ->withTimestamps();
     }
 
     public function isLowOnStock()
@@ -65,7 +65,8 @@ class Ingredient extends Model
         return $query->where('stock', '<=', 0);
     }
 
-    public function shouldSendAlert () {
-        return $this->stock < $this->max_stock && !$this->alert_sent;
+    public function shouldSendAlert()
+    {
+        return $this->stock < $this->max_stock && ! $this->alert_sent;
     }
 }

@@ -18,8 +18,8 @@ class Order extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class, 'order_product')
-                    ->withPivot('quantity')
-                    ->withTimestamps();
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
 
     public function updateProductStock()
@@ -39,6 +39,7 @@ class Order extends Model
                 }
             }
         }
+
         return true;
     }
 }

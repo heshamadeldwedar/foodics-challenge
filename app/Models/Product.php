@@ -17,15 +17,15 @@ class Product extends Model
     public function ingredients()
     {
         return $this->belongsToMany(Ingredient::class, 'product_ingredient')
-                    ->withPivot('unit_id')
-                    ->withTimestamps();
+            ->withPivot('unit_id')
+            ->withTimestamps();
     }
 
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'order_products')
-                    ->withPivot('quantity')
-                    ->withTimestamps();
+            ->withPivot('quantity')
+            ->withTimestamps();
     }
 
     public function unit()

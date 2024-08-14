@@ -36,7 +36,7 @@ class Unit extends Model
 
     public function getConversionFactor($toUnit)
     {
-        if (!$this->is_convertible || !$toUnit->is_convertible) {
+        if (! $this->is_convertible || ! $toUnit->is_convertible) {
             return null;
         }
 
