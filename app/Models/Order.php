@@ -10,21 +10,15 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'total_price',
-        'customer_name',
-        'customer_email',
-        'customer_phone',
-        'notes',
     ];
 
     protected $casts = [
-        'total_price' => 'decimal:2',
     ];
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'order_products')
-                    ->withPivot('quantity', 'price')
+        return $this->belongsToMany(Product::class, 'order_product')
+                    ->withPivot('quantity')
                     ->withTimestamps();
     }
 

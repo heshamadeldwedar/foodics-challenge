@@ -5,10 +5,6 @@ use App\Http\Controllers\Api\IngredientController;
 use App\Http\Controllers\Api\OrderController;
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/ingredients', [IngredientController::class, 'index']);
 Route::get('/ingredients/{id}', [IngredientController::class, 'show']);
 

@@ -15,11 +15,26 @@ use App\Models\Order;
  */
 class OrderController extends Controller
 {
+
      /**
      * @OA\Get(
      *     path="/orders",
      *     summary="get all orders",
-     *     @OA\Response(response="200", description="Successful operation")
+     *     tags={"Orders"},
+     *    @OA\Response(
+     *        response=200,
+     *       description="successful operation",
+     *      @OA\JsonContent(
+     *          type="array",
+     *         @OA\Items(
+     *              @OA\Property(property="id", type="integer"),
+     *              @OA\Property(property="product_id", type="integer"),
+     *              @OA\Property(property="user_id", type="integer"),
+     *              @OA\Property(property="created_at", type="date"),
+     *              @OA\Property(property="updated_at", type="date"),
+     *          )
+     *      )
+     *    )
      * )
      */
     public function index()
