@@ -29,11 +29,6 @@ class Unit extends Model
         return $this->hasMany(Ingredient::class, 'stock_unit_id');
     }
 
-    public function productIngredients()
-    {
-        return $this->hasMany(ProductIngredient::class);
-    }
-
     public function getConversionFactor($toUnit)
     {
         if (! $this->is_convertible || ! $toUnit->is_convertible) {
