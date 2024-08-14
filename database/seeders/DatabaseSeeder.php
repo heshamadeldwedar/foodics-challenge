@@ -16,13 +16,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
         $units = [
             // Weight units
             [
@@ -63,9 +56,9 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Piece',
                 'abbreviation' => 'pc',
                 'category' => 'quantity',
-                'is_convertible' => false,
-                'conversion_factor' => null,
-                'is_base_unit' => false,
+                'is_convertible' => true,
+                'conversion_factor' => 1,
+                'is_base_unit' => true,
             ],
             [
                 'name' => 'Dozen',
@@ -87,23 +80,23 @@ class DatabaseSeeder extends Seeder
         $ingredients = [
             [
                 'name' => 'Beef',
-                'stock' => 20,
-                'max_stock' => 20,
-                'stock_unit_id' => $kg->id,
+                'stock' => 20000,
+                'max_stock' => 20000,
+                'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
             ],
             [
                 'name' => 'Cheese',
-                'stock' => 5,
-                'max_stock' => 5,
-                'stock_unit_id' => $kg->id,
+                'stock' => 5000,
+                'max_stock' => 5000,
+                'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
             ],
             [
                 'name' => 'Onion',
-                'stock' => 1,
-                'max_stock' => 1,
-                'stock_unit_id' => $kg->id,
+                'stock' => 1000,
+                'max_stock' => 1000,
+                'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
             ],
         ];
