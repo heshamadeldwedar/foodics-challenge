@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('stock', 10, 3);
             $table->unsignedBigInteger('stock_unit_id');
-            $table->decimal('alert_threshold', 10, 3);
+            $table->decimal('max_stock', 10, 3);
             $table->boolean('alert_sent')->default(false);
             $table->timestamps();
             $table->foreign('stock_unit_id')->references('id')->on('units');

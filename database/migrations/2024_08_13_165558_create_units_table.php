@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('abbreviation');
-            $table->string('category'); // e.g., 'weight', 'volume', 'quantity'
+            $table->string('category');
             $table->boolean('is_convertible')->default(true);
             $table->decimal('conversion_factor', 15, 8)->nullable();
             $table->boolean('is_base_unit')->default(false);
