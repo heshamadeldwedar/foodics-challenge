@@ -5,13 +5,13 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/orders": {
+        "/api/orders": {
             "get": {
                 "tags": [
                     "Orders"
                 ],
                 "summary": "get all orders",
-                "operationId": "8f3183bfa0ecb8a2c864cbf972b8061d",
+                "operationId": "955bb77a45ae173a485fadb8befed93f",
                 "responses": {
                     "200": {
                         "description": "successful operation",
