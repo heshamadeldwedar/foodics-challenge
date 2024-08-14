@@ -12,14 +12,14 @@ class Ingredient extends Model
     protected $fillable = [
         'name',
         'stock',
+        'max_stock',
         'stock_unit_id',
-        'alert_threshold',
         'alert_sent'
     ];
 
     protected $casts = [
         'stock' => 'decimal:3',
-        'alert_threshold' => 'decimal:3',
+        'max_stock' => 'decimal:3',
         'alert_sent' => 'boolean'
     ];
 
@@ -37,7 +37,7 @@ class Ingredient extends Model
 
     public function isLowOnStock()
     {
-        return $this->stock <= $this->alert_threshold;
+        return $this->stock <= $this->max_stock;
     }
 
     public function updateStock($amount, Unit $unit)
@@ -52,7 +52,7 @@ class Ingredient extends Model
 
     public function scopeLowStock($query)
     {
-        return $query->whereRaw('stock <= alert_threshold');
+        return $query->whereRaw('stock <= max_stock');
     }
 
     public function scopeInStock($query)
@@ -63,5 +63,9 @@ class Ingredient extends Model
     public function scopeOutOfStock($query)
     {
         return $query->where('stock', '<=', 0);
+    }
+
+    public function shouldSendAlert () {
+        return $this->stock < $this->max_stock && !$this->alert_sent;
     }
 }
