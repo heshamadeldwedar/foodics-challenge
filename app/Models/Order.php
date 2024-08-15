@@ -28,18 +28,4 @@ class Order extends Model
             $product->updateStock();
         }
     }
-
-    public function canBeFulfilled()
-    {
-        foreach ($this->products as $product) {
-            foreach ($product->ingredients as $ingredient) {
-                $requiredAmount = $ingredient->pivot->amount * $product->pivot->quantity;
-                if ($ingredient->stock < $requiredAmount) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
 }

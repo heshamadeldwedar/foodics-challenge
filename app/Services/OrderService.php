@@ -6,7 +6,7 @@ use App\Http\Requests\CreateOrderRequest;
 use App\Models\Order;
 use App\Models\Product;
 use Exception;
-use Illuminate\Support\Facades\DB;
+use App\Jobs\UpdateProductStock;
 
 class OrderService
 {
@@ -17,21 +17,11 @@ class OrderService
 
     public function store(CreateOrderRequest $data)
     {
+        $order = $this->createOrder($data->orders);
 
-        return DB::transaction(function () use ($data) {
-            try {
+        UpdateProductStock::dispatch($data->orders);
 
-                $this->validateHaveEnoughStock($data->orders);
-                $order = $this->createOrder($data->orders);
-                $this->updateStock($data->orders);
-                DB::commit();
-
-                return $order;
-            } catch (Exception $e) {
-                DB::rollBack();
-                return response()->json(['message' => $e->getMessage()], 400);
-            }
-        });
+        return $order;
 
     }
 
@@ -54,16 +44,6 @@ class OrderService
             if (!$product->haveEnoughStock($quantity)) {
                 throw new Exception('Not enough stock');
             }
-        }
-    }
-
-    protected function updateStock($orders)
-    {
-        $productIds = collect($orders)->pluck('product_id');
-        $products = Product::whereIn('id', $productIds)->with(['ingredients.stockUnit'])->get();
-        foreach ($products as $product) {
-            $quantity = collect($orders)->pluck('quantity')->first();
-            $product->updateStock($quantity);
         }
     }
 }

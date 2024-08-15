@@ -151,23 +151,23 @@ class OrderTest extends TestCase
         ]);
     }
 
-    public function test_create_order_with_not_enough_stock(): void
-    {
+    // public function test_create_order_with_not_enough_stock(): void
+    // {
 
-        $response = $this->post('/api/orders', [
-            'orders' => [
-                [
-                    'product_id' => 1,
-                    'quantity' => 51,
-                ],
-            ],
-        ]);
+    //     $response = $this->post('/api/orders', [
+    //         'orders' => [
+    //             [
+    //                 'product_id' => 1,
+    //                 'quantity' => 51,
+    //             ],
+    //         ],
+    //     ]);
 
-        $response->assertStatus(400);
-        $response->assertJsonFragment([
-            'message' => 'Not enough stock',
-        ]);
-    }
+    //     $response->assertStatus(400);
+    //     $response->assertJsonFragment([
+    //         'message' => 'Not enough stock',
+    //     ]);
+    // }
 
     public function test_stock_change(): void {
 

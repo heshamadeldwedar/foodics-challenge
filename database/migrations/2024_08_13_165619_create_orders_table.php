@@ -11,6 +11,8 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->enum('status', ['pending', 'completed', 'cancelled'])->default('pending');
+            $table->string('cancellation_reason')->nullable();
         });
     }
 
