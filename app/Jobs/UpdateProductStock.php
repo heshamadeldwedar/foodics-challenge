@@ -17,11 +17,8 @@ class UpdateProductStock implements ShouldQueue
 
     public $tries = 1;
 
-    private $order;
-
-    public function __construct($order)
+    public function __construct(private $order)
     {
-        $this->order = $order;
     }
 
     public function handle(): void

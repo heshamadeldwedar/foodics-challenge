@@ -15,11 +15,8 @@ use App\Services\OrderService;
  */
 class OrderController extends Controller
 {
-    private $orderService;
-
-    public function __construct(OrderService $orderService)
+    public function __construct(private readonly OrderService $orderService)
     {
-        $this->orderService = $orderService;
     }
 
     /**

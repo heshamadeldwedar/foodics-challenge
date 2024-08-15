@@ -53,10 +53,10 @@ class Product extends Model
         $updates = [];
         foreach ($this->ingredients as $ingredient) {
             $stockChange = $quantity * $ingredient->pivot->amount;
-            array_push($updates, [
+            $updates[] = [
                 'id' => $ingredient->id,
                 'stock_change' => $stockChange,
-            ]);
+            ];
         }
         if (! $this->haveEnoughStock($quantity)) {
             throw new Exception('Not enough stock');
