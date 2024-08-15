@@ -2,9 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class OrderTest extends TestCase
 {
@@ -186,9 +185,8 @@ class OrderTest extends TestCase
 
     }
 
-    public function test_stock_change(): void {
-
-
+    public function test_stock_change(): void
+    {
         // before removing 150 gm of beef, 30 gm of cheese, 20 gm of onion
         $this->assertDatabaseHas('ingredients', [
             'name' => 'Beef',

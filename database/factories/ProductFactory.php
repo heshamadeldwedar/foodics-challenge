@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Ingredient;
 use App\Models\Product;
 use App\Models\Unit;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -25,17 +25,16 @@ class ProductFactory extends Factory
         ];
     }
 
-    public function configure() {
+    public function configure()
+    {
         return $this->afterCreating(function (Product $product) {
             $gm = Unit::where('name', 'Gram')->first();
             $onion = Ingredient::where('name', 'Onion')->first();
 
-
             $product->ingredients()->attach(
                 $onion,
-                ['unit_id' => $gm->id, 'amount'=> '500']
+                ['unit_id' => $gm->id, 'amount' => '500']
             );
         });
     }
 }
-

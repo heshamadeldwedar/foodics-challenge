@@ -3,9 +3,8 @@
 namespace App\Services;
 
 use App\Http\Requests\CreateOrderRequest;
-use App\Models\Order;
-use Illuminate\Support\Facades\Bus;
 use App\Jobs\UpdateProductStock;
+use App\Models\Order;
 
 class OrderService
 {
@@ -19,7 +18,6 @@ class OrderService
         $order = $this->createOrder($data->orders);
 
         UpdateProductStock::dispatch($order);
-
 
         return $order;
 

@@ -48,6 +48,6 @@ class Ingredient extends Model
 
     public function shouldSendAlert()
     {
-        return $this->current_stock < $this->max_stock && !$this->alert_sent;
+        return $this->current_stock < $this->max_stock && ! $this->alert_sent;
     }
 }
