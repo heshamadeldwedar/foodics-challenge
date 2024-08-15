@@ -11,14 +11,14 @@ class Ingredient extends Model
 
     protected $fillable = [
         'name',
-        'stock',
+        'current_stock',
         'max_stock',
         'stock_unit_id',
         'alert_sent',
     ];
 
     protected $casts = [
-        'stock' => 'decimal:3',
+        'current_stock' => 'decimal:3',
         'max_stock' => 'decimal:3',
         'alert_sent' => 'boolean',
     ];
@@ -37,36 +37,17 @@ class Ingredient extends Model
 
     public function isLowOnStock()
     {
-        return $this->stock <= $this->max_stock;
+        return $this->current_stock <= $this->max_stock;
     }
 
-    public function updateStock($amount, Unit $unit)
+    public function updateStock($orderItem)
     {
-        if ($unit->id !== $this->stock_unit_id) {
-            $amount = $unit->convert($amount, $this->stockUnit);
-        }
-
-        $this->stock += $amount;
-        $this->save();
-    }
-
-    public function scopeLowStock($query)
-    {
-        return $query->whereRaw('stock <= max_stock');
-    }
-
-    public function scopeInStock($query)
-    {
-        return $query->where('stock', '>', 0);
-    }
-
-    public function scopeOutOfStock($query)
-    {
-        return $query->where('stock', '<=', 0);
+        $stockChange = -$orderItem['quantity'] * $this->pivot->amount;
+        $this->lockForUpdate()->decrement('current_stock', abs($stockChange));
     }
 
     public function shouldSendAlert()
     {
-        return $this->stock < $this->max_stock && ! $this->alert_sent;
+        return $this->current_stock < $this->max_stock && ! $this->alert_sent;
     }
 }

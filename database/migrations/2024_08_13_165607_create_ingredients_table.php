@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('stock', 10, 3);
+            $table->decimal('current_stock', 10, 3);
             $table->unsignedBigInteger('stock_unit_id');
             $table->decimal('max_stock', 10, 3);
             $table->boolean('alert_sent')->default(false);

@@ -80,21 +80,21 @@ class DatabaseSeeder extends Seeder
         $ingredients = [
             [
                 'name' => 'Beef',
-                'stock' => 20000,
+                'current_stock' => 20000,
                 'max_stock' => 20000,
                 'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
             ],
             [
                 'name' => 'Cheese',
-                'stock' => 5000,
+                'current_stock' => 5000,
                 'max_stock' => 5000,
                 'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
             ],
             [
                 'name' => 'Onion',
-                'stock' => 1000,
+                'current_stock' => 1000,
                 'max_stock' => 1000,
                 'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
@@ -122,8 +122,8 @@ class DatabaseSeeder extends Seeder
         $burger = Product::where('name', 'Cheese Burger')->first();
 
         // 150 gram of beef, 30 gram of cheese, 20 gram of onion
-        $burger->ingredients()->attach($beef, ['quantity' => 150, 'unit_id' => $gm->id]);
-        $burger->ingredients()->attach($cheese, ['quantity' => 30, 'unit_id' => $gm->id]);
-        $burger->ingredients()->attach($onion, ['quantity' => 20, 'unit_id' => $gm->id]);
+        $burger->ingredients()->attach($beef, ['amount' => 150, 'unit_id' => $gm->id]);
+        $burger->ingredients()->attach($cheese, ['amount' => 30, 'unit_id' => $gm->id]);
+        $burger->ingredients()->attach($onion, ['amount' => 20, 'unit_id' => $gm->id]);
     }
 }

@@ -33,19 +33,23 @@ class Product extends Model
         return $this->belongsTo(Unit::class);
     }
 
-    public function updateStock()
+    public function haveEnoughStock($quantity)
     {
         foreach ($this->ingredients as $ingredient) {
-            $ingredientUnit = Unit::find($ingredient->pivot->unit_id);
-            $stockUnit = $ingredient->stockUnit;
-
-            $amount = $ingredient->pivot->amount;
-            if ($ingredientUnit->id !== $stockUnit->id) {
-                $amount = $ingredientUnit->convert($amount, $stockUnit);
+            error_log(print_r($quantity, true));
+            error_log(print_r($ingredient->amount, true));
+            $stockChange = $quantity * $ingredient->amount;
+            if ($ingredient->current_stock < $stockChange) {
+                return false;
             }
+        }
+        return true;
+    }
 
-            $ingredient->stock -= $amount;
-            $ingredient->save();
+    public function updateStock($quantity)
+    {
+        foreach ($this->ingredients as $ingredient) {
+            $stockChange = $quantity * $ingredient->pivot->unit->conversion_factor;
         }
     }
 }
