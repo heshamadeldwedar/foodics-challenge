@@ -7,8 +7,8 @@ use Tests\TestCase;
 
 class OrderTest extends TestCase
 {
-
     use RefreshDatabase;
+
     public $seed = true;
 
     public function test_get_empty_order(): void
@@ -41,12 +41,12 @@ class OrderTest extends TestCase
         $response->assertJsonIsArray();
         $response->assertJsonCount(1);
         $response->assertJsonStructure([
-            "*" => [
+            '*' => [
                 'id',
                 'created_at',
                 'updated_at',
                 'products' => [
-                    "*" => [
+                    '*' => [
                         'id',
                         'name',
                         'created_at',
@@ -57,10 +57,10 @@ class OrderTest extends TestCase
                             'quantity',
                             'created_at',
                             'updated_at',
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ]);
         $response->assertJsonFragment([
             'id' => 1,
@@ -93,12 +93,12 @@ class OrderTest extends TestCase
         $response->assertJsonCount(2);
 
         $response->assertJsonStructure([
-            "*" => [
+            '*' => [
                 'id',
                 'created_at',
                 'updated_at',
                 'products' => [
-                    "*" => [
+                    '*' => [
                         'id',
                         'name',
                         'created_at',
@@ -109,10 +109,10 @@ class OrderTest extends TestCase
                             'quantity',
                             'created_at',
                             'updated_at',
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ]);
         $response->assertJsonFragment([
             'id' => 1,
@@ -125,5 +125,4 @@ class OrderTest extends TestCase
             'quantity' => 2,
         ]);
     }
-
 }

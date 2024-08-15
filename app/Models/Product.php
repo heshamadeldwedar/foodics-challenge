@@ -36,13 +36,12 @@ class Product extends Model
     public function haveEnoughStock($quantity)
     {
         foreach ($this->ingredients as $ingredient) {
-            error_log(print_r($quantity, true));
-            error_log(print_r($ingredient->amount, true));
             $stockChange = $quantity * $ingredient->amount;
             if ($ingredient->current_stock < $stockChange) {
                 return false;
             }
         }
+
         return true;
     }
 
