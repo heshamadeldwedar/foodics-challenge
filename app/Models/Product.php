@@ -17,6 +17,7 @@ class Product extends Model
     public function ingredients()
     {
         return $this->belongsToMany(Ingredient::class, 'product_ingredient')
+            ->withPivot('amount')
             ->withPivot('unit_id')
             ->withTimestamps();
     }
@@ -36,8 +37,15 @@ class Product extends Model
     public function haveEnoughStock($quantity)
     {
         foreach ($this->ingredients as $ingredient) {
-            $stockChange = $quantity * $ingredient->amount;
+            $stockChange = $quantity * $ingredient->pivot->amount;
+
+            error_log(print_r(gettype($ingredient->current_stock), true));
+            error_log(print_r($ingredient->current_stock, true));
+            error_log(print_r($stockChange, true));
+            error_log(print_r(gettype($stockChange), true));
+
             if ($ingredient->current_stock < $stockChange) {
+                error_log(print_r('i got here', true));
                 return false;
             }
         }

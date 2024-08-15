@@ -18,8 +18,8 @@ class Ingredient extends Model
     ];
 
     protected $casts = [
-        'current_stock' => 'decimal:3',
-        'max_stock' => 'decimal:3',
+        'current_stock' => 'double',
+        'max_stock' => 'double',
         'alert_sent' => 'boolean',
     ];
 
@@ -48,6 +48,6 @@ class Ingredient extends Model
 
     public function shouldSendAlert()
     {
-        return $this->current_stock < $this->max_stock && ! $this->alert_sent;
+        return $this->current_stock < $this->max_stock && !$this->alert_sent;
     }
 }

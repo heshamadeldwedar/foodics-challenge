@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use Database\Factories\ProductFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Product;
 
 class OrderTest extends TestCase
 {
@@ -124,5 +126,21 @@ class OrderTest extends TestCase
             'product_id' => 1,
             'quantity' => 2,
         ]);
+    }
+
+    public function test_create_order_with_not_enough_stock(): void
+    {
+
+        $response = $this->post('/api/orders', [
+            'orders' => [
+                [
+                    'product_id' => 1,
+                    'quantity' => 51,
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(400);
+
     }
 }

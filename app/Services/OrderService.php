@@ -20,6 +20,7 @@ class OrderService
 
         return DB::transaction(function () use ($data) {
             try {
+
                 $this->validateHaveEnoughStock($data->orders);
                 $order = $this->createOrder($data->orders);
                 DB::commit();
@@ -27,7 +28,7 @@ class OrderService
                 return $order;
             } catch (Exception $e) {
                 DB::rollBack();
-                throw $e;
+                return response()->json(['message' => $e->getMessage()], 400);
             }
         });
 
@@ -48,7 +49,9 @@ class OrderService
         $productIds = collect($orders)->pluck('product_id');
         $products = Product::whereIn('id', $productIds)->with('ingredients')->get();
         foreach ($products as $product) {
-            if (! $product->haveEnoughStock(collect($orders)->pluck('quantity')->first())) {
+            $quantity = collect($orders)->pluck('quantity')->first();
+            if (!$product->haveEnoughStock($quantity)) {
+                error_log(print_r('i got here', true));
                 throw new Exception('Not enough stock');
             }
         }
