@@ -14,10 +14,11 @@
 
 ## How to run the code 
 
-- Start Sail: `./vendor/bin/sail up -d`
-- Install dependencies: `./vendor/bin/sail composer install`.
-- Set up environment: `cp .env.example .env && ./vendor/bin/sail artisan key:generate`
-- Run migrations: `./vendor/bin/sail artisan migrate`
+- install php version 8
+- Set up environment: `cp .env.example .env`
+- Install sail dependencies: `composer require laravel/sail --dev`
+- Start Sail: `./vendor/bin/sail up`
+- Run migrations: `./vendor/bin/sail artisan migrate --seed`
 - Start queue worker: `./vendor/bin/sail artisan queue:work`
 
 ## How to run the tests
