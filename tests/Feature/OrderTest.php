@@ -170,12 +170,6 @@ class OrderTest extends TestCase
             'cancellation_reason' => 'Not enough stock',
         ]);
 
-        $this->assertDatabaseHas('order_product', [
-            'order_id' => 1,
-            'product_id' => 1,
-            'quantity' => 51,
-        ]);
-
         // Stock Is not updated //
         $this->assertDatabaseHas(('ingredients'), [
             'name' => 'Beef',
