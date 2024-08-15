@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+
 
 class Product extends Model
 {
@@ -37,26 +39,28 @@ class Product extends Model
     public function haveEnoughStock($quantity)
     {
         foreach ($this->ingredients as $ingredient) {
-            $stockChange = $quantity * $ingredient->pivot->amount;
-
-            error_log(print_r(gettype($ingredient->current_stock), true));
-            error_log(print_r($ingredient->current_stock, true));
-            error_log(print_r($stockChange, true));
-            error_log(print_r(gettype($stockChange), true));
-
+            $stockChange = $quantity * ($ingredient->pivot->amount);
             if ($ingredient->current_stock < $stockChange) {
-                error_log(print_r('i got here', true));
                 return false;
             }
         }
-
         return true;
     }
 
     public function updateStock($quantity)
     {
+        $updates = [];
         foreach ($this->ingredients as $ingredient) {
-            $stockChange = $quantity * $ingredient->pivot->unit->conversion_factor;
+            $stockChange = $quantity * $ingredient->pivot->amount;
+            array_push($updates, [
+                'id' => $ingredient->id,
+                'stock_change' => $stockChange,
+            ]);
         }
+        Collection::make($updates)->each(function ($update) {
+            Ingredient::where('id', $update['id'])
+                ->lockForUpdate()
+                ->decrement('current_stock', $update['stock_change']);
+        });
     }
 }

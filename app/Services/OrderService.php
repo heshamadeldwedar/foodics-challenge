@@ -23,6 +23,7 @@ class OrderService
 
                 $this->validateHaveEnoughStock($data->orders);
                 $order = $this->createOrder($data->orders);
+                $this->updateStock($data->orders);
                 DB::commit();
 
                 return $order;
@@ -47,13 +48,22 @@ class OrderService
     protected function validateHaveEnoughStock($orders)
     {
         $productIds = collect($orders)->pluck('product_id');
-        $products = Product::whereIn('id', $productIds)->with('ingredients')->get();
+        $products = Product::whereIn('id', $productIds)->with(['ingredients.stockUnit'])->get();
         foreach ($products as $product) {
             $quantity = collect($orders)->pluck('quantity')->first();
             if (!$product->haveEnoughStock($quantity)) {
-                error_log(print_r('i got here', true));
                 throw new Exception('Not enough stock');
             }
+        }
+    }
+
+    protected function updateStock($orders)
+    {
+        $productIds = collect($orders)->pluck('product_id');
+        $products = Product::whereIn('id', $productIds)->with(['ingredients.stockUnit'])->get();
+        foreach ($products as $product) {
+            $quantity = collect($orders)->pluck('quantity')->first();
+            $product->updateStock($quantity);
         }
     }
 }

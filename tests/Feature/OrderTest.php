@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use Database\Factories\ProductFactory;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\Product;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class OrderTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public $seed = true;
 
@@ -38,6 +37,14 @@ class OrderTest extends TestCase
 
     public function test_get_one_order(): void
     {
+        $this->post('/api/orders', [
+            'orders' => [
+                [
+                    'product_id' => 1,
+                    'quantity' => 1,
+                ],
+            ],
+        ]);
         $response = $this->get('/api/orders');
         $response->assertStatus(200);
         $response->assertJsonIsArray();
@@ -83,12 +90,28 @@ class OrderTest extends TestCase
         ]);
         $response->assertStatus(201);
         $response->assertJSON([
-            'id' => 2,
+            'id' => 1,
         ]);
     }
 
     public function test_get_two_orders(): void
     {
+        $this->post('/api/orders', [
+            'orders' => [
+                [
+                    'product_id' => 1,
+                    'quantity' => 1,
+                ],
+            ],
+        ]);
+        $this->post('/api/orders', [
+            'orders' => [
+                [
+                    'product_id' => 1,
+                    'quantity' => 2,
+                ],
+            ],
+        ]);
         $response = $this->get('/api/orders');
         $response->assertStatus(200);
         $response->assertJsonIsArray();
@@ -141,6 +164,50 @@ class OrderTest extends TestCase
         ]);
 
         $response->assertStatus(400);
+        $response->assertJsonFragment([
+            'message' => 'Not enough stock',
+        ]);
+    }
+
+    public function test_stock_change(): void {
+
+
+        // before removing 150 gm of beef, 30 gm of cheese, 20 gm of onion
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Beef',
+            'current_stock' => 20000,
+        ]);
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Onion',
+            'current_stock' => 1000,
+        ]);
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Cheese',
+            'current_stock' => 5000,
+        ]);
+
+        $this->post('/api/orders', [
+            'orders' => [
+                [
+                    'product_id' => 1,
+                    'quantity' => 1,
+                ],
+            ],
+        ]);
+
+        // after removing 150 gm of beef, 30 gm of cheese, 20 gm of onion //
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Beef',
+            'current_stock' => 19850,
+        ]);
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Onion',
+            'current_stock' => 980,
+        ]);
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Cheese',
+            'current_stock' => 4970,
+        ]);
 
     }
 }
