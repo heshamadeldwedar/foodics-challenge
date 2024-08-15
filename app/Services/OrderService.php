@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Http\Requests\CreateOrderRequest;
+use App\Jobs\CheckStockAndNotify;
 use App\Jobs\UpdateProductStock;
 use App\Models\Order;
+use Illuminate\Support\Facades\Bus;
 
 class OrderService
 {
@@ -17,7 +19,11 @@ class OrderService
     {
         $order = $this->createOrder($data->orders);
 
-        UpdateProductStock::dispatch($order);
+        Bus::chain([
+            new UpdateProductStock($order),
+            new CheckStockAndNotify(),
+        ])->dispatch();
+
 
         return $order;
 
@@ -29,7 +35,6 @@ class OrderService
         foreach ($orders as $order) {
             $result->products()->attach($order['product_id'], ['quantity' => $order['quantity']]);
         }
-
         return $result;
     }
 }

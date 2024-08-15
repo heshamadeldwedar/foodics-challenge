@@ -83,6 +83,7 @@ class DatabaseSeeder extends Seeder
                 'max_stock' => 20000,
                 'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
+                'supplier_email' => 'beef@example.com',
             ],
             [
                 'name' => 'Cheese',
@@ -90,6 +91,7 @@ class DatabaseSeeder extends Seeder
                 'max_stock' => 5000,
                 'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
+                'supplier_email' => 'cheese@example.com',
             ],
             [
                 'name' => 'Onion',
@@ -97,6 +99,7 @@ class DatabaseSeeder extends Seeder
                 'max_stock' => 1000,
                 'stock_unit_id' => $gm->id,
                 'alert_sent' => false,
+                'supplier_email' => 'onion@example.com',
             ],
         ];
 

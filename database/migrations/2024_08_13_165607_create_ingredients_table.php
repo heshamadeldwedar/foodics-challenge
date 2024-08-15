@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('stock_unit_id');
             $table->decimal('max_stock', 10, 3);
             $table->boolean('alert_sent')->default(false);
+            $table->string('supplier_email')->nullable();
             $table->timestamps();
             $table->foreign('stock_unit_id')->references('id')->on('units');
         });

@@ -4,6 +4,12 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\LowStockNotification;
+use Mockery;
+use Illuminate\Support\Facades\Queue;
+use App\Jobs\CheckStockAndNotify;
+use App\Jobs\UpdateProductStock;
 
 class OrderTest extends TestCase
 {
@@ -223,6 +229,42 @@ class OrderTest extends TestCase
             'name' => 'Cheese',
             'current_stock' => 4970,
         ]);
+    }
 
+    public function test_email_not_sent_after_half_ingredients_consumed(): void
+    {
+        $this->post('/api/orders', [
+            'orders' => [
+                [
+                    'product_id' => 1,
+                    'quantity' => 25,
+                ],
+            ],
+        ]);
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Onion',
+            'alert_sent' => 0,
+            'current_stock' => 500,
+            'max_stock' => 1000,
+        ]);
+    }
+
+    public function test_email_sent_after_more_than_half_ingredients_consumed(): void
+    {
+        $this->post('/api/orders', [
+            'orders' => [
+                [
+                    'product_id' => 1,
+                    'quantity' => 26,
+                ],
+            ],
+        ]);
+
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Onion',
+            'alert_sent' => 1,
+            'current_stock' => 480,
+            'max_stock' => 1000,
+        ]);
     }
 }
