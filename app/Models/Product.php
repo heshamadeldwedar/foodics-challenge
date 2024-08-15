@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-
+use Exception;
 
 class Product extends Model
 {
@@ -56,6 +56,9 @@ class Product extends Model
                 'id' => $ingredient->id,
                 'stock_change' => $stockChange,
             ]);
+        }
+        if (!$this->haveEnoughStock($quantity)) {
+            throw new Exception('Not enough stock');
         }
         Collection::make($updates)->each(function ($update) {
             Ingredient::where('id', $update['id'])

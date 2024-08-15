@@ -151,23 +151,46 @@ class OrderTest extends TestCase
         ]);
     }
 
-    // public function test_create_order_with_not_enough_stock(): void
-    // {
+    public function test_create_order_with_not_enough_stock(): void
+    {
 
-    //     $response = $this->post('/api/orders', [
-    //         'orders' => [
-    //             [
-    //                 'product_id' => 1,
-    //                 'quantity' => 51,
-    //             ],
-    //         ],
-    //     ]);
+        $this->post('/api/orders', [
+            'orders' => [
+                [
+                    'product_id' => 1,
+                    'quantity' => 51,
+                ],
+            ],
+        ]);
 
-    //     $response->assertStatus(400);
-    //     $response->assertJsonFragment([
-    //         'message' => 'Not enough stock',
-    //     ]);
-    // }
+        // Order should be cancelled
+        $this->assertDatabaseHas('orders', [
+            'id' => 1,
+            'status' => 'cancelled',
+            'cancellation_reason' => 'Not enough stock',
+        ]);
+
+        $this->assertDatabaseHas('order_product', [
+            'order_id' => 1,
+            'product_id' => 1,
+            'quantity' => 51,
+        ]);
+
+        // Stock Is not updated //
+        $this->assertDatabaseHas(('ingredients'), [
+            'name' => 'Beef',
+            'current_stock' => 20000,
+        ]);
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Onion',
+            'current_stock' => 1000,
+        ]);
+        $this->assertDatabaseHas('ingredients', [
+            'name' => 'Cheese',
+            'current_stock' => 5000,
+        ]);
+
+    }
 
     public function test_stock_change(): void {
 
